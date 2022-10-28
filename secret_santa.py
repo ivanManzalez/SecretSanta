@@ -36,20 +36,8 @@ def init_santas_and_receivers(N):
 			names_dict[i+1] = full_name 
 	return names_dict,names_list
 
-def get_santa(N, names_dict, names_list):
-	final_list = {}
-	for i in range(N):
-		num = randint(1,N)
-		santa = names_list[i]
-		receiver = names_dict[num]
-		if (santa == receiver):
-			get_santa(N-i, names_dict, names_list[i:])
-		final_list[santa] = receiver
-	return final_list
-
 
 #INITIALIZE DATA STRUCTURES USED
-names_dict = {}
 names_list = []
 
 contact_dict = {}
@@ -61,29 +49,50 @@ ux_dict = { ## come up with better name
 } 
 
 #ADD N SANTAS TO NAMES_DICT
-N = int(input("How many persons will be included in this year's Secret Santa?\n"))
-names_dict, names_list = init_santas_and_receivers(N)
-print(names_dict, '\n',names_list)
+#N = int(input("How many persons will be included in this year's Secret Santa?\n"))
+#names_list = init_santas_and_receivers(N)
+#print(names_dict, '\n',names_list)
 #SELECT SANTA AND RECEIVER 
 # santa_dict = get_santa(N, names_dict, names_list)
 
 # print(santa_dict)
 
 
+def secret_santas(names):
+	
+	def random_rearrange(names):
+		cycle_santas = []
+		for i in range(len(names)):
+			x = names[randint(0,len(names)-1)]
+			cycle_santas.append(x)
+			names.remove(x)
+		return cycle_santas
+
+	def cycle(santas, start, end, matches):
+		if start + 1 > end:
+			matches[santas[end]] = santas[0]
+			return matches
+		else:
+			santa = santas[start]
+			receiver = santas[start + 1]
+			matches[santa] = receiver
+			start += 1
+			cycle(santas, start, end, matches)
 
 
+	matches = {}
+	santas = random_rearrange(names)
+	print(santas)
+
+	cycle(santas, 0, len(santas)-1, matches)	
+	print(matches)
+
+	return matches
 
 
+names = ['A', 'B', 'C', 'D', 'E', 'F']
 
-
-
-
-
-
-
-
-
-
+secret_santas(names)
 
 
 #################################################
